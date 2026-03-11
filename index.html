@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>广荣科技 · 商业计划书逻辑架构</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+    background: #F0F4FF;
+    color: #111827;
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+  }
+
+  /* ── Title ── */
+  .page-title { text-align: center; margin-bottom: 52px; }
+  .page-title h1 { font-size: 26px; font-weight: 800; color: #1E3A8A; letter-spacing: 2px; }
+  .page-title p  { font-size: 13px; color: #6B7280; margin-top: 8px; }
+  .page-title .tag {
+    display: inline-block;
+    background: linear-gradient(135deg, #1E3A8A, #2563EB);
+    color: #fff; padding: 4px 18px; border-radius: 20px;
+    font-size: 12px; margin-top: 12px; letter-spacing: 1px;
+  }
+
+  /* ── Section header ── */
+  .sec-header {
+    display: flex; align-items: center; gap: 12px;
+    max-width: 1160px; margin: 0 auto 22px;
+  }
+  .sec-header .num {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: #1E3A8A; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+  }
+  .sec-header h2 { font-size: 17px; font-weight: 700; color: #1E3A8A; }
+  .sec-header .line { flex: 1; height: 1px; background: linear-gradient(90deg, #BFDBFE, transparent); }
+
+  /* ── Cards ── */
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid #BFDBFE;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 12px 18px;
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+    color: #fff;
+  }
+
+  /* ── Flywheel ── */
+  .flywheel-section { max-width: 1160px; margin: 0 auto 60px; }
+  .flywheel {
+    display: flex; align-items: stretch; justify-content: center;
+    gap: 0; background: #fff; border-radius: 16px;
+    border: 1px solid #BFDBFE; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(30,58,138,0.07);
+  }
+  .fw-node {
+    flex: 1; padding: 24px 14px; text-align: center;
+    border-right: 1px solid #EEF2FF;
+    transition: background 0.2s;
+  }
+  .fw-node:last-child { border-right: none; }
+  .fw-node:hover { background: #EEF6FF; }
+  .fw-node .icon { font-size: 30px; margin-bottom: 10px; }
+  .fw-node .title { font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+  .fw-node .desc { font-size: 11px; color: #6B7280; line-height: 1.6; }
+  .fw-arrow {
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 4px; font-size: 20px; color: #93C5FD; flex-shrink: 0;
+  }
+  .fw-cycle {
+    width: 100%; text-align: center; padding: 10px 0;
+    font-size: 11px; color: #2563EB; letter-spacing: 1px;
+    border-top: 1px solid #EEF2FF; background: #EFF6FF;
+  }
+
+  /* ── Three columns ── */
+  .three-col {
+    max-width: 1160px; margin: 0 auto 60px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;
+  }
+  .col-card { background: #fff; border-radius: 14px; border: 1px solid #BFDBFE; overflow: hidden; }
+  .col-header { padding: 14px 18px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: #fff; }
+  .col-body { padding: 16px; }
+  .item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid #F3F4F6; }
+  .item:last-child { border-bottom: none; }
+  .item-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .item-content .name { font-size: 13px; font-weight: 700; color: #1E3A8A; }
+  .item-content .detail { font-size: 11px; color: #6B7280; margin-top: 3px; line-height: 1.5; }
+  .badge {
+    display: inline-block; font-size: 10px; padding: 2px 10px;
+    border-radius: 10px; margin-top: 5px; font-weight: 600;
+  }
+
+  /* ── 1+N+X Architecture ── */
+  .arch-section { max-width: 1160px; margin: 0 auto 60px; }
+  .arch-box { background: #fff; border-radius: 16px; border: 1px solid #BFDBFE; overflow: hidden; box-shadow: 0 2px 12px rgba(30,58,138,0.07); }
+  .arch-layer { display: flex; align-items: stretch; border-bottom: 1px solid #EEF2FF; }
+  .arch-layer:last-child { border-bottom: none; }
+  .arch-label {
+    width: 100px; flex-shrink: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 4px;
+    padding: 18px 10px; font-weight: 800; font-size: 13px;
+    letter-spacing: 1px;
+  }
+  .arch-content {
+    flex: 1; padding: 16px 18px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  }
+  .arch-chip {
+    background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px;
+    padding: 6px 14px; font-size: 12px; color: #1E3A8A; flex-shrink: 0;
+  }
+  .arch-chip.hl { background: #EEF2FF; border-color: #818CF8; color: #3730A3; font-weight: 700; }
+  .arch-chip.g  { background: #ECFDF5; border-color: #6EE7B7; color: #065F46; }
+  .arch-chip.b  { background: #EFF6FF; border-color: #93C5FD; color: #1E40AF; }
+  .arch-chip.a  { background: #FFFBEB; border-color: #FCD34D; color: #92400E; }
+
+  /* X多元场景 */
+  .x-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; width: 100%; }
+  .x-col .x-head {
+    border-radius: 8px 8px 0 0; padding: 8px 12px;
+    font-size: 12px; font-weight: 700; color: #fff;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .x-col .x-body { background: #F9FAFB; border: 1px solid #E5E7EB; border-top: none; border-radius: 0 0 8px 8px; padding: 8px 12px; }
+  .x-col .x-item { font-size: 11px; color: #374151; padding: 3px 0; display: flex; gap: 6px; }
+  .x-col .x-item::before { content: '▸'; color: #93C5FD; flex-shrink: 0; }
+
+  /* ── Moats ── */
+  .moat-section { max-width: 1160px; margin: 0 auto 60px; }
+  .moat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+  .moat-card {
+    background: #fff; border-radius: 14px; border: 1px solid #BFDBFE;
+    padding: 22px 16px; position: relative; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(30,58,138,0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .moat-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(30,58,138,0.12); }
+  .moat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+  .moat-card:nth-child(1)::before { background: linear-gradient(90deg,#1E3A8A,#2563EB); }
+  .moat-card:nth-child(2)::before { background: linear-gradient(90deg,#0EA5E9,#06B6D4); }
+  .moat-card:nth-child(3)::before { background: linear-gradient(90deg,#059669,#10B981); }
+  .moat-card:nth-child(4)::before { background: linear-gradient(90deg,#D97706,#F59E0B); }
+  .moat-num { font-size: 42px; font-weight: 900; color: #F3F4F6; position: absolute; top: 8px; right: 12px; line-height: 1; }
+  .moat-icon { font-size: 26px; margin-bottom: 10px; }
+  .moat-title { font-size: 15px; font-weight: 800; color: #1E3A8A; margin-bottom: 10px; }
+  .moat-pts li { font-size: 11.5px; color: #374151; padding: 3px 0 3px 12px; position: relative; line-height: 1.5; list-style: none; }
+  .moat-pts li::before { content: '✓'; position: absolute; left: 0; font-weight: 700; }
+  .moat-card:nth-child(1) .moat-pts li::before { color: #2563EB; }
+  .moat-card:nth-child(2) .moat-pts li::before { color: #0EA5E9; }
+  .moat-card:nth-child(3) .moat-pts li::before { color: #059669; }
+  .moat-card:nth-child(4) .moat-pts li::before { color: #D97706; }
+
+  /* ── Finance ── */
+  .finance-section { max-width: 1160px; margin: 0 auto 60px; }
+  .finance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .finance-card { background: #fff; border-radius: 14px; border: 1px solid #BFDBFE; padding: 26px; box-shadow: 0 2px 8px rgba(30,58,138,0.06); }
+  .finance-title { font-size: 13px; font-weight: 700; color: #6B7280; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase; }
+  .rev-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .rev-year { font-size: 12px; color: #6B7280; width: 48px; flex-shrink: 0; }
+  .rev-bar-wrap { flex: 1; background: #F3F4F6; border-radius: 6px; height: 28px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 12px; font-size: 12px; font-weight: 700; color: #fff; }
+  .rev-bar.y25 { background: linear-gradient(90deg,#93C5FD,#3B82F6); width: 3%; }
+  .rev-bar.y26 { background: linear-gradient(90deg,#6EE7B7,#059669); width: 30%; }
+  .rev-bar.y27 { background: linear-gradient(90deg,#A78BFA,#7C3AED); width: 55%; }
+  .rev-bar.y28 { background: linear-gradient(90deg,#FCD34D,#D97706); width: 100%; }
+  .rev-amount { font-size: 14px; font-weight: 700; width: 80px; flex-shrink: 0; text-align: right; }
+
+  .use-row { display: flex; align-items: center; gap: 12px; margin-bottom: 13px; }
+  .use-pct { font-size: 18px; font-weight: 800; width: 48px; flex-shrink: 0; }
+  .use-bar-wrap { flex: 1; background: #F3F4F6; border-radius: 4px; height: 6px; }
+  .use-bar { height: 6px; border-radius: 4px; }
+  .use-info .name { font-size: 13px; font-weight: 700; color: #1E3A8A; }
+  .use-info .amount { font-size: 11px; color: #6B7280; margin-top: 1px; }
+  .valuation-note { margin-top: 18px; padding: 10px 14px; background: #EFF6FF; border-radius: 8px; font-size: 11.5px; color: #1E40AF; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<!-- 标题 -->
+<div class="page-title">
+  <h1>北京广荣创新科技有限公司</h1>
+  <p>商业计划书 · 核心逻辑架构  ·  天使轮融资  ·  投前估值 2.5-3.5亿</p>
+  <span class="tag">银发垂直大模型 · 1+N+X · 天使轮 · 投前2.5-3.5亿</span>
+</div>
+
+<!-- ① 核心增长飞轮 -->
+<div class="sec-header" style="margin-bottom:16px">
+  <div class="num">1</div>
+  <h2>核心增长飞轮</h2>
+  <div class="line"></div>
+</div>
+<div class="flywheel-section">
+  <div class="flywheel">
+    <div class="fw-node">
+      <div class="icon">🧠</div>
+      <div class="title" style="color:#1E3A8A">HealGPT<br>大模型</div>
+      <div class="desc">银发健康垂类TOP1<br>20+自研AI模型<br>技术底座</div>
+    </div>
+    <div class="fw-arrow">→</div>
+    <div class="fw-node">
+      <div class="icon">🏛️</div>
+      <div class="title" style="color:#059669">G端<br>政府入口</div>
+      <div class="desc">民政部唯一AI机器人<br>500万人次筛查<br>内江2.9亿项目</div>
+    </div>
+    <div class="fw-arrow">→</div>
+    <div class="fw-node">
+      <div class="icon">👴</div>
+      <div class="title" style="color:#D97706">C端<br>用户沉淀</div>
+      <div class="desc">查报告进平台<br>脑健康数据积累<br>自然高留存</div>
+    </div>
+    <div class="fw-arrow">→</div>
+    <div class="fw-node">
+      <div class="icon">🏢</div>
+      <div class="title" style="color:#2563EB">B端<br>生态伙伴</div>
+      <div class="desc">平安·美年·OTC<br>适老化·保险·药品<br>服务商入驻</div>
+    </div>
+    <div class="fw-arrow">→</div>
+    <div class="fw-node">
+      <div class="icon">💰</div>
+      <div class="title" style="color:#7C3AED">多元<br>收入</div>
+      <div class="desc">平台佣金<br>AI赋能服务费<br>数据变现</div>
+    </div>
+    <div class="fw-arrow" style="transform:scaleX(-1)">→</div>
+  </div>
+  <div class="fw-cycle">↻ 数据积累 → 大模型更精准 → 更多G端项目 → 飞轮持续强化</div>
+</div>
+
+<!-- ② 三端战略 -->
+<div class="sec-header">
+  <div class="num">2</div>
+  <h2>三端战略布局（G · B · C）</h2>
+  <div class="line"></div>
+</div>
+<div class="three-col">
+  <!-- G端 -->
+  <div class="col-card">
+    <div class="col-header" style="background:linear-gradient(135deg,#064E3B,#059669)">🏛️ G端 · 政府项目</div>
+    <div class="col-body">
+      <div class="item">
+        <div class="item-dot" style="background:#059669"></div>
+        <div class="item-content">
+          <div class="name">内江银发大模型平台</div>
+          <div class="detail">国内首个城市级银发大模型项目<br>总额2.9亿 · 广荣承接软硬件</div>
+          <span class="badge" style="background:#ECFDF5;color:#065F46">3000万/年 · 已签约</span>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-dot" style="background:#059669"></div>
+        <div class="item-content">
+          <div class="name">民政部中央专项</div>
+          <div class="detail">唯一AI养老机器人供应商<br>山东·新疆试点150台落地</div>
+          <span class="badge" style="background:#ECFDF5;color:#065F46">全国可复制</span>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-dot" style="background:#059669"></div>
+        <div class="item-content">
+          <div class="name">500万人次认知筛查</div>
+          <div class="detail">甘肃省全域老年痴呆筛查<br>数据归我方 · 用户导入平台</div>
+          <span class="badge" style="background:#ECFDF5;color:#065F46">数据护城河</span>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-dot" style="background:#059669"></div>
+        <div class="item-content">
+          <div class="name">国补 · 消费券唯一覆盖</div>
+          <div class="detail">工信部唯一AI适老化产品<br>享受30-50%国家补贴</div>
+          <span class="badge" style="background:#ECFDF5;color:#065F46">2025年入选</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- B端 -->
+  <div class="col-card">
+    <div class="col-header" style="background:linear-gradient(135deg,#1E3A8A,#2563EB)">🏢 B端 · 生态伙伴</div>
+    <div class="col-body">
+      <div class="item">
+        <div class="item-dot" style="background:#2563EB"></div>
+        <div class="item-content">
+          <div class="name">平安健康（01833.HK）</div>
+          <div class="detail">高端居家养老服务入驻<br>2025年4月正式签约</div>
+          <span class="badge" style="background:#EFF6FF;color:#1E40AF">战略签约 · 合同在手</span>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-dot" style="background:#2563EB"></div>
+        <div class="item-content">
+          <div class="name">OTC药品头部平台</div>
+          <div class="detail">营收17亿 · 年增百万用户<br>0.8元/人次 + GMV 10%分成</div>
+          <span class="badge" style="background:#EFF6FF;color:#1E40AF">收入分润中</span>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-dot" style="background:#2563EB"></div>
+        <div class="item-content">
+          <div class="name">上海适老化（沪排名第一）</div>
+          <div class="detail">AI赋能增收10%分润<br>2026保底1000万营收</div>
+          <span class="badge" style="background:#EFF6FF;color:#1E40AF">全国复制规划</span>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-dot" style="background:#2563EB"></div>
+        <div class="item-content">
+          <div class="name">美年大健康（002044）</div>
+          <div class="detail">全国最大体检连锁<br>筛查后精准导流变现</div>
+          <span class="badge" style="background:#EFF6FF;color:#1E40AF">合作意向确认</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- C端 -->
+  <div class="col-card">
+    <div class="col-header" style="background:linear-gradient(135deg,#78350F,#D97706)">👴 C端 · 用户服务</div>
+    <div class="col-body">
+      <div class="item">
+        <div class="item-dot" style="background:#D97706"></div>
+        <div class="item-content">
+          <div class="name">小荣健康陪伴机器人</div>
+          <div class="detail">2999元硬件 + 365元/年订阅<br>150台民政部试点 · 蓄力商业化</div>
+          <span class="badge" style="background:#FFFBEB;color:#92400E">硬件毛利50%</span>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-dot" style="background:#D97706"></div>
+        <div class="item-content">
+          <div class="name">脑健康报告解读服务</div>
+          <div class="detail">政府筛查后用户查报告进平台<br>真人医生解读 · 付费干预</div>
+          <span class="badge" style="background:#FFFBEB;color:#92400E">自然转化</span>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-dot" style="background:#D97706"></div>
+        <div class="item-content">
+          <div class="name">AI中医问诊 · 慢病管理</div>
+          <div class="detail">体质辨识 · 用药提醒 · 健康方案<br>订阅 + 单次收费</div>
+          <span class="badge" style="background:#FFFBEB;color:#92400E">软件毛利90%</span>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-dot" style="background:#D97706"></div>
+        <div class="item-content">
+          <div class="name">平台生态一站式服务</div>
+          <div class="detail">居家养老 · 体检 · 适老化改造<br>类美团模式·商家入驻</div>
+          <span class="badge" style="background:#FFFBEB;color:#92400E">佣金收入</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ③ 1+N+X 架构 -->
+<div class="sec-header">
+  <div class="num">3</div>
+  <h2>技术架构：1 + N + X  多元场景</h2>
+  <div class="line"></div>
+</div>
+<div class="arch-section">
+  <div class="arch-box">
+    <!-- 1 大模型 -->
+    <div class="arch-layer" style="background:#1E3A8A">
+      <div class="arch-label" style="color:#fff;background:#1E3A8A;border-right:1px solid rgba(255,255,255,0.2)">
+        <span style="font-size:28px;font-weight:900">1</span>
+        <span>大模型</span>
+      </div>
+      <div class="arch-content" style="background:#1E40AF;flex-direction:column;gap:4px;">
+        <div style="font-size:18px;font-weight:800;color:#fff">HealGPT  ·  银发健康垂类大模型</div>
+        <div style="font-size:12px;color:#BFDBFE">中文医疗评测 TOP1（4.72分） · 50万条临床数据 · 91%准确率 · AUC=0.80 · 最大中文医疗问答数据集 GR-CMQ&Ads</div>
+      </div>
+    </div>
+    <!-- N Agent -->
+    <div class="arch-layer" style="background:#EFF6FF">
+      <div class="arch-label" style="color:#2563EB;background:#DBEAFE;border-right:1px solid #BFDBFE">
+        <span style="font-size:28px;font-weight:900">N</span>
+        <span>Agent</span>
+      </div>
+      <div class="arch-content">
+        <span class="arch-chip hl">🤝 情感陪伴</span>
+        <span class="arch-chip hl">🧩 认知筛查</span>
+        <span class="arch-chip hl">💊 慢病管理</span>
+        <span class="arch-chip">🩺 视频医生</span>
+        <span class="arch-chip">🧠 认知干预</span>
+        <span class="arch-chip">⚠️ 跌倒预警</span>
+        <span class="arch-chip">🏃 健康管理</span>
+        <span class="arch-chip">😊 情绪疏导</span>
+        <span class="arch-chip">🌿 中医问诊</span>
+        <span class="arch-chip">📋 健康报告</span>
+        <span class="arch-chip" style="color:#6B7280">+ 更多...</span>
+      </div>
+    </div>
+    <!-- X 多元场景 -->
+    <div class="arch-layer" style="background:#F9FAFB">
+      <div class="arch-label" style="color:#059669;background:#ECFDF5;border-right:1px solid #A7F3D0">
+        <span style="font-size:28px;font-weight:900">X</span>
+        <span>场景</span>
+      </div>
+      <div class="arch-content" style="align-items:stretch">
+        <div class="x-grid">
+          <div class="x-col">
+            <div class="x-head" style="background:#059669">🏛️ G端 · 政府场景</div>
+            <div class="x-body">
+              <div class="x-item">全民普筛（500万人次筛查）</div>
+              <div class="x-item">城市银发大模型平台建设</div>
+              <div class="x-item">民政部中央专项落地</div>
+              <div class="x-item">国家老年痴呆防治行动</div>
+            </div>
+          </div>
+          <div class="x-col">
+            <div class="x-head" style="background:#2563EB">🏢 B端 · 机构场景</div>
+            <div class="x-body">
+              <div class="x-item">OTC药品平台赋能</div>
+              <div class="x-item">居家养老服务（平安健康）</div>
+              <div class="x-item">体检机构赋能（美年大健康）</div>
+              <div class="x-item">适老化改造（上海第一）</div>
+            </div>
+          </div>
+          <div class="x-col">
+            <div class="x-head" style="background:#D97706">👴 C端 · 个人场景</div>
+            <div class="x-body">
+              <div class="x-item">脑健康管理与干预服务</div>
+              <div class="x-item">情感陪伴机器人</div>
+              <div class="x-item">AI中医问诊服务</div>
+              <div class="x-item">慢病健康管理</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 数据飞轮 -->
+    <div class="arch-layer" style="background:#FFF7ED">
+      <div class="arch-label" style="color:#D97706;background:#FFEDD5;border-right:1px solid #FED7AA;font-size:11px">
+        <span>数据</span><span>飞轮</span>
+      </div>
+      <div class="arch-content" style="gap:12px">
+        <span class="arch-chip a">脑健康数据（500万人次）</span>
+        <span class="arch-chip a">中医健康数据（独家）</span>
+        <span class="arch-chip a">情感交互数据</span>
+        <span class="arch-chip a">慢病管理数据</span>
+        <span style="font-size:13px;color:#D97706;font-weight:700">→ 持续反哺大模型 → 精准度↑ → 政府信任↑</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ④ 四大壁垒 -->
+<div class="sec-header">
+  <div class="num">4</div>
+  <h2>四大核心壁垒</h2>
+  <div class="line"></div>
+</div>
+<div class="moat-section">
+  <div class="moat-grid">
+    <div class="moat-card">
+      <div class="moat-num">01</div>
+      <div class="moat-icon">🏛️</div>
+      <div class="moat-title">政府信任护城河</div>
+      <ul class="moat-pts">
+        <li>民政部中央专项<b style="color:#2563EB">唯一</b>AI机器人</li>
+        <li>工信部老年用品目录<b style="color:#2563EB">唯一</b>AI产品</li>
+        <li>国家重点专项联合攻关单位</li>
+        <li>内江标杆→复制全国300+城市</li>
+        <li>大厂需3-5年建立同等信任</li>
+      </ul>
+    </div>
+    <div class="moat-card">
+      <div class="moat-num">02</div>
+      <div class="moat-icon">🔬</div>
+      <div class="moat-title">医疗资质壁垒</div>
+      <ul class="moat-pts">
+        <li>二类医疗器械注册检验通过</li>
+        <li>北京大学联合研究·国标共建</li>
+        <li>世界卫生组织相关课题</li>
+        <li>4项发明专利·30+软件著作权</li>
+        <li>国家高新技术企业认定</li>
+      </ul>
+    </div>
+    <div class="moat-card">
+      <div class="moat-num">03</div>
+      <div class="moat-icon">📊</div>
+      <div class="moat-title">稀缺数据壁垒</div>
+      <ul class="moat-pts">
+        <li>500万人次脑健康筛查授权</li>
+        <li>中医健康数据独家积累</li>
+        <li>数据归我方·用户导入平台</li>
+        <li>最大中文医疗问答数据集</li>
+        <li>数据越多·模型越精准</li>
+      </ul>
+    </div>
+    <div class="moat-card">
+      <div class="moat-num">04</div>
+      <div class="moat-icon">🔗</div>
+      <div class="moat-title">平台网络效应</div>
+      <ul class="moat-pts">
+        <li>平安健康·美年大健康签约</li>
+        <li>B端越多→服务越好→用户越多</li>
+        <li>类美团双边网络正向飞轮</li>
+        <li>内江模式标准化可快速复制</li>
+        <li>先发优势极难被追赶</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ⑤ 财务规划 -->
+<div class="sec-header">
+  <div class="num">5</div>
+  <h2>财务规划 · 融资方案</h2>
+  <div class="line"></div>
+</div>
+<div class="finance-section">
+  <div class="finance-grid">
+    <div class="finance-card">
+      <div class="finance-title">▸ 营收预测（人民币）</div>
+      <div class="rev-row">
+        <div class="rev-year">2025A</div>
+        <div class="rev-bar-wrap"><div class="rev-bar y25">300万</div></div>
+        <div class="rev-amount" style="color:#2563EB">300万</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-year">2026E</div>
+        <div class="rev-bar-wrap"><div class="rev-bar y26">3,000万</div></div>
+        <div class="rev-amount" style="color:#059669">3,000万</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-year">2027E</div>
+        <div class="rev-bar-wrap"><div class="rev-bar y27">~8,000万</div></div>
+        <div class="rev-amount" style="color:#7C3AED">~8,000万</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-year">2028E</div>
+        <div class="rev-bar-wrap"><div class="rev-bar y28">3-5亿</div></div>
+        <div class="rev-amount" style="color:#D97706">3-5亿</div>
+      </div>
+      <div style="margin-top:14px;padding:10px 14px;background:#F0FDF4;border-radius:8px;font-size:11.5px;color:#065F46;line-height:1.8">
+        <b>软件/订阅毛利率 90%</b> · 硬件毛利率 50% · 综合毛利率 ≈75%+<br>
+        2026收入：内江3000万 + OTC分润200万+ + B端生态起量
+      </div>
+    </div>
+    <div class="finance-card">
+      <div class="finance-title">▸ 本轮融资用途（天使轮 · 3000-5000万）</div>
+      <div class="use-row">
+        <div class="use-pct" style="color:#059669">30%</div>
+        <div>
+          <div class="use-bar-wrap" style="margin-bottom:4px"><div class="use-bar" style="width:30%;background:linear-gradient(90deg,#059669,#10B981)"></div></div>
+          <div class="use-info"><div class="name">城市复制 & BD拓展</div><div class="amount">约900-1500万 · 内江模式→全国推广</div></div>
+        </div>
+      </div>
+      <div class="use-row">
+        <div class="use-pct" style="color:#2563EB">25%</div>
+        <div>
+          <div class="use-bar-wrap" style="margin-bottom:4px"><div class="use-bar" style="width:25%;background:linear-gradient(90deg,#2563EB,#60A5FA)"></div></div>
+          <div class="use-info"><div class="name">技术平台研发</div><div class="amount">约750-1250万 · 大模型迭代·Agent扩展</div></div>
+        </div>
+      </div>
+      <div class="use-row">
+        <div class="use-pct" style="color:#7C3AED">20%</div>
+        <div>
+          <div class="use-bar-wrap" style="margin-bottom:4px"><div class="use-bar" style="width:20%;background:linear-gradient(90deg,#7C3AED,#A78BFA)"></div></div>
+          <div class="use-info"><div class="name">平台运营 · B端招募</div><div class="amount">约600-1000万 · 让合作真正落地</div></div>
+        </div>
+      </div>
+      <div class="use-row">
+        <div class="use-pct" style="color:#D97706">15%</div>
+        <div>
+          <div class="use-bar-wrap" style="margin-bottom:4px"><div class="use-bar" style="width:15%;background:linear-gradient(90deg,#D97706,#FCD34D)"></div></div>
+          <div class="use-info"><div class="name">硬件规模化生产</div><div class="amount">约450-750万 · 试点→商业化量产</div></div>
+        </div>
+      </div>
+      <div class="use-row">
+        <div class="use-pct" style="color:#0EA5E9">10%</div>
+        <div>
+          <div class="use-bar-wrap" style="margin-bottom:4px"><div class="use-bar" style="width:10%;background:linear-gradient(90deg,#0EA5E9,#38BDF8)"></div></div>
+          <div class="use-info"><div class="name">核心团队扩充</div><div class="amount">约300-500万 · 销售·运营·技术关键岗</div></div>
+        </div>
+      </div>
+      <div class="valuation-note">
+        释放股权：<b>10-15%</b> · 投前估值：<b>2.5-3.5亿元</b><br>
+        2026年PS倍数：<b style="color:#059669">8-12倍</b>（天使轮SaaS+平台公司合理区间）<br>
+        投前估值2.5-3.5亿 · 对标早期医疗AI平台PS通常10-20倍，本次估值保守合理
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:30px 0 10px;font-size:12px;color:#9CA3AF;letter-spacing:2px">
+  北京广荣创新科技有限公司 · 科技改善生活 · Tech for Better Life
+</div>
+
+</body>
+</html>
