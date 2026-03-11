@@ -64,6 +64,7 @@
   .fw-node {
     flex: 1; padding: 24px 14px; text-align: center;
     border-right: 1px solid #EEF2FF;
+    display: flex; flex-direction: column; align-items: center;
     transition: background 0.2s;
   }
   .fw-node:last-child { border-right: none; }
@@ -71,6 +72,7 @@
   .fw-node .icon { font-size: 30px; margin-bottom: 10px; }
   .fw-node .title { font-size: 15px; font-weight: 800; margin-bottom: 6px; }
   .fw-node .desc { font-size: 11px; color: #6B7280; line-height: 1.6; }
+  .fw-node-text { text-align: center; }
   .fw-arrow {
     display: flex; align-items: center; justify-content: center;
     padding: 0 4px; font-size: 20px; color: #93C5FD; flex-shrink: 0;
@@ -181,72 +183,142 @@
   .use-info .amount { font-size: 11px; color: #6B7280; margin-top: 1px; }
   .valuation-note { margin-top: 18px; padding: 10px 14px; background: #EFF6FF; border-radius: 8px; font-size: 11.5px; color: #1E40AF; line-height: 1.7; }
 
-  /* ── 移动端适配 ── */
+  /* ════════════════════════════════════════
+     移动端适配  ≤ 768px
+  ════════════════════════════════════════ */
   @media (max-width: 768px) {
-    body { padding: 24px 14px 48px; }
+    body { padding: 20px 12px 52px; }
 
-    .page-title h1 { font-size: 19px; letter-spacing: 1px; }
-    .page-title p  { font-size: 12px; }
-    .page-title .tag { font-size: 11px; padding: 4px 12px; }
-    .page-title { margin-bottom: 32px; }
+    /* ── 标题区 ── */
+    .page-title { margin-bottom: 28px; }
+    .page-title h1 { font-size: 18px; letter-spacing: 0; line-height: 1.4; }
+    .page-title p  { font-size: 12px; margin-top: 6px; line-height: 1.6; }
+    .page-title .tag {
+      font-size: 11px; padding: 4px 12px;
+      word-break: keep-all; white-space: normal;
+      line-height: 1.8; display: inline;
+    }
 
-    /* section header */
-    .sec-header h2 { font-size: 15px; }
+    /* ── Section header ── */
+    .sec-header { margin-bottom: 14px; }
+    .sec-header h2 { font-size: 14px; }
+    .sec-header .num { width: 26px; height: 26px; font-size: 12px; }
 
-    /* ── Flywheel 变竖排 ── */
-    .flywheel {
+    /* ════════════════
+       ① 飞轮 → 卡片列表
+    ════════════════ */
+    .flywheel-section { margin-bottom: 36px; }
+    .flywheel { flex-direction: column; border-radius: 12px; }
+    .fw-node {
+      border-right: none;
+      border-bottom: 1px solid #EEF2FF;
+      padding: 14px 16px;
+      flex-direction: row; /* 覆盖桌面端 column */
+      align-items: center; gap: 14px; text-align: left;
+      flex: none;
+    }
+    .fw-node:last-child { border-bottom: none; }
+    .fw-node .icon { font-size: 26px; margin-bottom: 0; flex-shrink: 0; }
+    .fw-node .title { font-size: 14px; margin-bottom: 2px; line-height: 1.4; }
+    .fw-node .desc  { font-size: 11px; line-height: 1.5; }
+    .fw-node-text { text-align: left; }
+    /* 隐藏横向箭头，竖排靠分隔线表达顺序 */
+    .fw-arrow { display: none; }
+    .fw-arrow-back { display: none; }
+    .fw-cycle { font-size: 10.5px; padding: 8px 12px; letter-spacing: 0; text-align: left; }
+
+    /* ════════════════
+       ② 三端战略 → 单列
+    ════════════════ */
+    .three-col {
+      grid-template-columns: 1fr;
+      gap: 12px; margin-bottom: 36px;
+    }
+    .col-header { font-size: 13px; padding: 12px 14px; }
+    .col-body { padding: 12px; }
+    .item { padding: 8px 0; gap: 8px; }
+    .item-content .name { font-size: 12px; }
+    .item-content .detail { font-size: 11px; }
+    .badge { font-size: 10px; padding: 2px 8px; }
+
+    /* ════════════════
+       ③ 架构层 → 竖排（label 变顶部标题栏）
+    ════════════════ */
+    .arch-section { margin-bottom: 36px; }
+    .arch-layer {
       flex-direction: column;
     }
-    .fw-node { border-right: none; border-bottom: 1px solid #EEF2FF; padding: 16px 20px; }
-    .fw-node:last-child { border-bottom: none; }
-    .fw-arrow { padding: 2px 0; font-size: 18px; }
-    .fw-arrow-back { display: none; } /* 竖排时隐藏返回箭头，飞轮循环文字已表达 */
+    .arch-label {
+      width: 100%;
+      flex-direction: row;
+      justify-content: flex-start;
+      gap: 8px;
+      padding: 10px 14px;
+      border-right: none;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      font-size: 13px;
+    }
+    .arch-label span:first-child { font-size: 22px; font-weight: 900; }
+    .arch-content { padding: 12px 14px; }
+    .arch-chip { font-size: 11px; padding: 5px 10px; }
 
-    /* ── Three columns → single column ── */
-    .three-col { grid-template-columns: 1fr; gap: 14px; }
-
-    /* ── Arch label wider on small screens ── */
-    .arch-label { width: 72px; font-size: 11px; padding: 14px 6px; }
-    .arch-layer > .arch-content { padding: 12px 12px; }
-
-    /* X grid → single column */
+    /* X 场景三列 → 单列 */
     .x-grid { grid-template-columns: 1fr; gap: 8px; }
+    .x-col .x-head { font-size: 12px; border-radius: 8px; }
+    .x-col .x-body { border-radius: 0 0 8px 8px; }
+    .x-col .x-item { font-size: 11px; }
 
-    /* ── Moat grid: 2 cols on tablet, 1 on phone ── */
-    .moat-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    /* HealGPT 大标题缩小 */
+    .arch-content > div[style*="font-size:18px"] { font-size: 15px !important; }
+    .arch-content > div[style*="font-size:12px"] { font-size: 11px !important; line-height: 1.6; }
+
+    /* 数据飞轮说明文字换行 */
+    .arch-content span[style*="font-size:13px"] { font-size: 12px !important; }
+
+    /* ════════════════
+       ④ 壁垒 → 2×2 格局
+    ════════════════ */
+    .moat-section { margin-bottom: 36px; }
+    .moat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
     .moat-card { padding: 16px 12px; }
-    .moat-num { font-size: 30px; }
-    .moat-title { font-size: 13px; }
-    .moat-pts li { font-size: 10.5px; }
+    .moat-num { font-size: 28px; top: 6px; right: 8px; }
+    .moat-icon { font-size: 22px; margin-bottom: 6px; }
+    .moat-title { font-size: 13px; margin-bottom: 8px; }
+    .moat-pts li { font-size: 10.5px; padding: 2px 0 2px 12px; line-height: 1.5; }
 
-    /* ── Finance grid → single column ── */
-    .finance-grid { grid-template-columns: 1fr; gap: 14px; }
+    /* ════════════════
+       ⑤ 财务 → 单列
+    ════════════════ */
+    .finance-section { margin-bottom: 36px; }
+    .finance-grid { grid-template-columns: 1fr; gap: 12px; }
     .finance-card { padding: 18px 14px; }
+    .finance-title { font-size: 12px; margin-bottom: 14px; }
 
-    /* rev bar text truncate */
-    .rev-bar { font-size: 11px; }
-    .rev-amount { font-size: 12px; width: 64px; }
+    /* 收入预测行 */
+    .rev-row { gap: 8px; margin-bottom: 10px; }
+    .rev-year { font-size: 11px; width: 44px; }
+    .rev-bar-wrap { height: 24px; }
+    .rev-bar { font-size: 0; } /* 条内文字隐藏，靠右侧金额显示 */
+    .rev-amount { font-size: 12px; font-weight: 700; width: 60px; }
 
-    /* use row adjust */
-    .use-pct { font-size: 15px; width: 40px; }
+    /* 融资用途行 */
+    .use-row { gap: 8px; margin-bottom: 12px; align-items: flex-start; }
+    .use-pct { font-size: 15px; font-weight: 900; width: 38px; padding-top: 2px; }
     .use-info .name { font-size: 12px; }
-    .use-info .amount { font-size: 10px; }
-
-    /* flywheel section bottom margin */
-    .flywheel-section { margin-bottom: 40px; }
-    .arch-section { margin-bottom: 40px; }
-    .moat-section { margin-bottom: 40px; }
-    .finance-section { margin-bottom: 40px; }
-    .three-col { margin-bottom: 40px; }
+    .use-info .amount { font-size: 10px; line-height: 1.5; }
+    .valuation-note { font-size: 11px; padding: 10px 12px; line-height: 1.7; }
   }
 
-  @media (max-width: 480px) {
+  /* ════════════════════════════════════════
+     超小屏  ≤ 390px
+  ════════════════════════════════════════ */
+  @media (max-width: 390px) {
+    body { padding: 16px 10px 48px; }
     .page-title h1 { font-size: 16px; }
     .moat-grid { grid-template-columns: 1fr; }
-    .arch-label { width: 60px; font-size: 10px; }
-    .arch-chip { font-size: 11px; padding: 5px 10px; }
-    .fw-node .title { font-size: 14px; }
-    .fw-node .desc  { font-size: 11px; }
+    .moat-card { padding: 14px 12px; }
+    .fw-node .icon { font-size: 22px; }
+    .arch-label span:first-child { font-size: 18px; }
   }
 </style>
 </head>
@@ -269,32 +341,42 @@
   <div class="flywheel">
     <div class="fw-node">
       <div class="icon">🧠</div>
-      <div class="title" style="color:#1E3A8A">HealGPT<br>大模型</div>
-      <div class="desc">银发健康垂类TOP1<br>20+自研AI模型<br>技术底座</div>
+      <div class="fw-node-text">
+        <div class="title" style="color:#1E3A8A">HealGPT 大模型</div>
+        <div class="desc">银发健康垂类TOP1 · 20+自研AI模型 · 技术底座</div>
+      </div>
     </div>
     <div class="fw-arrow">→</div>
     <div class="fw-node">
       <div class="icon">🏛️</div>
-      <div class="title" style="color:#059669">G端<br>政府入口</div>
-      <div class="desc">民政部唯一AI机器人<br>500万人次筛查<br>内江2.9亿项目</div>
+      <div class="fw-node-text">
+        <div class="title" style="color:#059669">G端 · 政府入口</div>
+        <div class="desc">民政部唯一AI机器人 · 500万人次筛查 · 内江2.9亿项目</div>
+      </div>
     </div>
     <div class="fw-arrow">→</div>
     <div class="fw-node">
       <div class="icon">👴</div>
-      <div class="title" style="color:#D97706">C端<br>用户沉淀</div>
-      <div class="desc">查报告进平台<br>脑健康数据积累<br>自然高留存</div>
+      <div class="fw-node-text">
+        <div class="title" style="color:#D97706">C端 · 用户沉淀</div>
+        <div class="desc">查报告进平台 · 脑健康数据积累 · 自然高留存</div>
+      </div>
     </div>
     <div class="fw-arrow">→</div>
     <div class="fw-node">
       <div class="icon">🏢</div>
-      <div class="title" style="color:#2563EB">B端<br>生态伙伴</div>
-      <div class="desc">平安·美年·OTC<br>适老化·保险·药品<br>服务商入驻</div>
+      <div class="fw-node-text">
+        <div class="title" style="color:#2563EB">B端 · 生态伙伴</div>
+        <div class="desc">平安·美年·OTC · 适老化·保险·药品 · 服务商入驻</div>
+      </div>
     </div>
     <div class="fw-arrow">→</div>
     <div class="fw-node">
       <div class="icon">💰</div>
-      <div class="title" style="color:#7C3AED">多元<br>收入</div>
-      <div class="desc">平台佣金<br>AI赋能服务费<br>数据变现</div>
+      <div class="fw-node-text">
+        <div class="title" style="color:#7C3AED">多元收入</div>
+        <div class="desc">平台佣金 · AI赋能服务费 · 数据变现</div>
+      </div>
     </div>
     <div class="fw-arrow fw-arrow-back">↩</div>
   </div>
