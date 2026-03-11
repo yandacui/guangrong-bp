@@ -180,6 +180,74 @@
   .use-info .name { font-size: 13px; font-weight: 700; color: #1E3A8A; }
   .use-info .amount { font-size: 11px; color: #6B7280; margin-top: 1px; }
   .valuation-note { margin-top: 18px; padding: 10px 14px; background: #EFF6FF; border-radius: 8px; font-size: 11.5px; color: #1E40AF; line-height: 1.7; }
+
+  /* ── 移动端适配 ── */
+  @media (max-width: 768px) {
+    body { padding: 24px 14px 48px; }
+
+    .page-title h1 { font-size: 19px; letter-spacing: 1px; }
+    .page-title p  { font-size: 12px; }
+    .page-title .tag { font-size: 11px; padding: 4px 12px; }
+    .page-title { margin-bottom: 32px; }
+
+    /* section header */
+    .sec-header h2 { font-size: 15px; }
+
+    /* ── Flywheel 变竖排 ── */
+    .flywheel {
+      flex-direction: column;
+    }
+    .fw-node { border-right: none; border-bottom: 1px solid #EEF2FF; padding: 16px 20px; }
+    .fw-node:last-child { border-bottom: none; }
+    .fw-arrow { padding: 2px 0; font-size: 18px; }
+    .fw-arrow-back { display: none; } /* 竖排时隐藏返回箭头，飞轮循环文字已表达 */
+
+    /* ── Three columns → single column ── */
+    .three-col { grid-template-columns: 1fr; gap: 14px; }
+
+    /* ── Arch label wider on small screens ── */
+    .arch-label { width: 72px; font-size: 11px; padding: 14px 6px; }
+    .arch-layer > .arch-content { padding: 12px 12px; }
+
+    /* X grid → single column */
+    .x-grid { grid-template-columns: 1fr; gap: 8px; }
+
+    /* ── Moat grid: 2 cols on tablet, 1 on phone ── */
+    .moat-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .moat-card { padding: 16px 12px; }
+    .moat-num { font-size: 30px; }
+    .moat-title { font-size: 13px; }
+    .moat-pts li { font-size: 10.5px; }
+
+    /* ── Finance grid → single column ── */
+    .finance-grid { grid-template-columns: 1fr; gap: 14px; }
+    .finance-card { padding: 18px 14px; }
+
+    /* rev bar text truncate */
+    .rev-bar { font-size: 11px; }
+    .rev-amount { font-size: 12px; width: 64px; }
+
+    /* use row adjust */
+    .use-pct { font-size: 15px; width: 40px; }
+    .use-info .name { font-size: 12px; }
+    .use-info .amount { font-size: 10px; }
+
+    /* flywheel section bottom margin */
+    .flywheel-section { margin-bottom: 40px; }
+    .arch-section { margin-bottom: 40px; }
+    .moat-section { margin-bottom: 40px; }
+    .finance-section { margin-bottom: 40px; }
+    .three-col { margin-bottom: 40px; }
+  }
+
+  @media (max-width: 480px) {
+    .page-title h1 { font-size: 16px; }
+    .moat-grid { grid-template-columns: 1fr; }
+    .arch-label { width: 60px; font-size: 10px; }
+    .arch-chip { font-size: 11px; padding: 5px 10px; }
+    .fw-node .title { font-size: 14px; }
+    .fw-node .desc  { font-size: 11px; }
+  }
 </style>
 </head>
 <body>
@@ -228,7 +296,7 @@
       <div class="title" style="color:#7C3AED">多元<br>收入</div>
       <div class="desc">平台佣金<br>AI赋能服务费<br>数据变现</div>
     </div>
-    <div class="fw-arrow" style="transform:scaleX(-1)">→</div>
+    <div class="fw-arrow fw-arrow-back">↩</div>
   </div>
   <div class="fw-cycle">↻ 数据积累 → 大模型更精准 → 更多G端项目 → 飞轮持续强化</div>
 </div>
